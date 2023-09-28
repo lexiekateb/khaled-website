@@ -25,7 +25,7 @@
     flex-direction: column;
     gap: 7vh;
     height: inherit;
-    width: 50vw;
+    width: 40vw;
 }
 
 .right-selections {
@@ -33,11 +33,7 @@
     flex-direction: column;
     gap: 1vw;
     height: inherit;
-    width: 50vw;
-}
-
-.label-text {
-    margin-bottom: .5vh;
+    width: 60vw;
 }
 
 .model-selector {
@@ -46,16 +42,25 @@
 
 .input-params, .step {
     display: flex;
+    align-items: left;
+    justify-content:flex-start;
+    flex-wrap: wrap;
+    gap: .5vh;
+}
+
+.paramContainer {
+    display: flex;
     flex-direction: row;
     align-items: left;
-    gap: 1vw;
-    flex-wrap: wrap;
+    justify-content:flex-start;
+    gap: 1vw;   
 }
 
 .single-params {
     display: flex;
     flex-direction: row;
     width: inherit;
+    height: 20vh;
     justify-content: space-between;
     flex-wrap: wrap;
 }
@@ -67,6 +72,5 @@
 }
 
 .param {
-    width: 3vw;
-    height: 1vh;
+    width: 5vw;
 }

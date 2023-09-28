@@ -64,7 +64,7 @@ const Home = () => {
             <div className="left-selections">
 
                 <div className="model-selector">
-                <Typography variant="h6" className="break">Model</Typography>
+                <Typography variant="h6" className="break"><b>Model</b></Typography>
                     <FormControl sx={{width: 300}}>
                         <InputLabel>Model</InputLabel>
                         <Select
@@ -82,42 +82,46 @@ const Home = () => {
                 </div>
 
                 <div className="input-params">
-                    <Typography variant="h6" className="break">Input Parameters</Typography>
-                    <TextField className="param" size="small" id="p0" label="p0" type="number" />
-                    <TextField className="param" size="small" id="p1" label="p1" type="number" />
-                    <TextField className="param" size="small" id="p2" label="p2" type="number" />
-                    <TextField className="param" id="p3" label="p3" type="number" />
-                    <TextField className="param" id="p4" label="p4" type="number" />
+                    <Typography variant="h6" className="break"><b>Input Parameters</b></Typography>
+                    <div className="paramContainer">
+                        <TextField className="param" id="p0" label="p0" type="number" />
+                        <TextField className="param" id="p1" label="p1" type="number" />
+                        <TextField className="param" id="p2" label="p2" type="number" />
+                        <TextField className="param" id="p3" label="p3" type="number" />
+                        <TextField className="param" id="p4" label="p4" type="number" />
                     <Button variant="contained" onClick={getSum1}>Sum</Button>
+                    </div>
                 </div>
                 
                 <div className="input-params">
-                    <Typography variant="h6" className="break">Step</Typography>
-                    <TextField className="param" id="outlined-number" label="s0" type="number" />
-                    <TextField className="param" id="outlined-number" label="s1" type="number" />
-                    <TextField className="param" id="outlined-number" label="s2" type="number" />
-                    <TextField className="param" id="outlined-number" label="s3" type="number" />
-                    <TextField className="param" id="outlined-number" label="s4" type="number" />
+                    <Typography variant="h6" className="break"><b>Step</b></Typography>
+                    <div className="paramContainer">
+                        <TextField className="param" id="outlined-number" label="s0" type="number" />
+                        <TextField className="param" id="outlined-number" label="s1" type="number" />
+                        <TextField className="param" id="outlined-number" label="s2" type="number" />
+                        <TextField className="param" id="outlined-number" label="s3" type="number" />
+                        <TextField className="param" id="outlined-number" label="s4" type="number" />
+                    </div>
                 </div>
 
                 <div className="single-params">
                     <div className="item">
-                        <Typography variant="h6">Noise</Typography>
+                        <Typography variant="h6"><b>Noise</b></Typography>
                         <TextField className="param" id="outlined-number" type="number" />
                     </div>
 
                     <div className="item">
-                        <Typography variant="h6">Random Noise</Typography>
+                        <Typography variant="h6"><b>Random Noise</b></Typography>
                         <TextField className="param" id="outlined-number" type="number" />
                     </div>
 
                     <div className="item">
-                        <Typography variant="h6">Density</Typography>
+                        <Typography variant="h6"><b>Density</b></Typography>
                         <TextField className="param" id="outlined-number" type="number" />
                     </div>
 
                     <div className="item">
-                        <Typography variant="h6">Num of Steps</Typography>
+                        <Typography variant="h6"><b>Num of Steps</b></Typography>
                         <TextField className="param" id="outlined-number" type="number" />
                     </div>
 
