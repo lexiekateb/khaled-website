@@ -25,7 +25,7 @@
     flex-direction: column;
     gap: 7vh;
     height: inherit;
-    width: 30vw;
+    width: 50vw;
 }
 
 .right-selections {
@@ -33,7 +33,7 @@
     flex-direction: column;
     gap: 1vw;
     height: inherit;
-    width: 60vw;
+    width: 50vw;
 }
 
 .label-text {
