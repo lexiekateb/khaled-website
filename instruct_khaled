@@ -1,0 +1,16 @@
+# load all modules: CUDA, Python, Mambda
+
+# cd into repo
+
+# create the environment
+
+# conda activate the new environment
+
+# run ./runPlot.sh
+
+
+
+
+k must be int at least 2
+matrix values between 0 and 1
+--p has to have 4 initiatior matrix, have to be float btw 0-1
