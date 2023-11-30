@@ -6,74 +6,31 @@
     margin-top: 2vh;
 }
 
-.break {
-    width: 100%;
-}
-
 .homecontainer {
     display: flex;
     flex-direction: row;
     height: fit-content;
-    width: 90vw;
+    width: 90%;
     padding: 5vh;
     gap: 10vw;
 }
 
-.leftselections {
+.inputparams {
     display: flex;
+    align-items: center;
+    width: 90%;
     flex-direction: column;
-    gap: 7vh;
-    height: inherit;
-    width: 40vw;
-}
-
-.rightselections {
-    display: flex;
-    flex-direction: column;
-    gap: 1vw;
-    height: inherit;
-    width: 40vw;
-}
-
-.dropdown {
-    width: 100%;
-}
-
-.modelselector {
-    width: 100%;
-}
-
-.inputparams, .step {
-    display: flex;
-    align-items: left;
-    justify-content:flex-start;
     flex-wrap: wrap;
-    gap: .5vh;
 }
 
 .paramContainer {
     display: flex;
-    flex-direction: row;
-    align-items: left;
-    justify-content:flex-start;
-    gap: 1vw;   
+    width: 100%;
+    justify-content:left;
+    gap: 10px;
+    align-items: center;
 }
 
-.singleparams {
-    display: flex;
-    flex-direction: row;
-    width: inherit;
-    height: 20vh;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-}
-
-.item {
-    display: flex;
-    width: 50%;
-    flex-direction: column;
-}
-
-.param {
-    width: 5vw;
+.numparam {
+    width: 75px;
 }

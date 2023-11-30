@@ -1,12 +1,20 @@
 import styles from "./index.module.css";
 import Box from "@mui/material/Box";
-import { CircularProgress, ImageList, ImageListItem } from "@mui/material";
+import { ImageList, ImageListItem } from "@mui/material";
+import { useEffect, useState} from "react";
+import { useLocation } from "react-router-dom";
 
 const Results = () => {
 
-    const images = require.context('/home/lexie/Documents/code/GraphRobustness', true, /\.(png|jpe?g|svg)$/);
-    const imageList = images.keys().map(image => images(image));
-    console.log(imageList[0]);
+    const [imageList, setImageList] = useState([]);
+    const state = useLocation();
+    let path = state.state?.imgpath || "";
+    console.log(path)
+
+    useEffect(() => {
+        const images = require.context('/home/lexie/Documents/code/GraphRobustness/plotRepo', true, /\.(png|jpe?g|svg)$/);
+        setImageList(images.keys().map(image => images(image)));
+    }, []);
 
     return (
         <Box className={styles.container}>
@@ -26,4 +34,4 @@ const Results = () => {
     )
 }
 
-export default Results
+export default Results;
