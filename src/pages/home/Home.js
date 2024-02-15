@@ -7,14 +7,15 @@ import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress } from "@mui/material";
-import { MenuItem, Checkbox, ListItemText, Select, InputLabel, FormControl, OutlinedInput, Tooltip } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
+
+import { MenuItem, Checkbox, ListItemText, Select, InputLabel, FormControl, OutlinedInput, FormControlLabel } from '@mui/material';
 
 const Home = () => {
     const [received, setReceived] = useState(false);
     const [loading, setLoading] = useState(false);
     const [models, setModels] = useState([]);
     const [path, setPath] = useState("");
+    const [props, setProps] = useState([]);
 
     const modelList = [
         'kde',
@@ -24,6 +25,24 @@ const Home = () => {
         'graph',
         'spy',
     ]
+
+    const propList = [
+        'deg',
+        'in-deg',
+        'out-deg',
+        'clustering',
+        'diameter',
+        'avg-shortest-path',
+        'betweenness-centrality',
+        'eignvector-centrality',
+        'laplacian-centrality',
+        'closeness-centrality',
+        'hop-count',
+        'scree'
+    ]
+
+    const label = { inputProps: { 'aria-label': 'Hello?' } };
+
     useEffect(() => {
         if(received === true) {
             setLoading(true);
@@ -63,8 +82,8 @@ const Home = () => {
             body: JSON.stringify(params)
             }).then((res) =>
         res.json().then((data) => {
-            console.log("data to set as path:" + data);
             setPath(data);
+            return true;
         }));  
 
         return true;
@@ -77,7 +96,7 @@ const Home = () => {
             'p3': document.getElementById('p3').value,
             'p4': document.getElementById('p4').value,
             'plots': models.join(' '),
-            'props': document.getElementById('props').value,
+            'props': props.join(' '),
             'k': document.getElementById('k').value,
         },);
 
@@ -88,7 +107,7 @@ const Home = () => {
         return(<CircularProgress />);
     }
 
-    const handleChange = (event) => {
+    const handleChangeModels = (event) => {
         const {
           target: { value },
         } = event;
@@ -96,6 +115,17 @@ const Home = () => {
           typeof value === 'string' ? value.split(',') : value,
         );
       };
+
+      const handleChangeProps = (event) => {
+        const {
+          target: { value },
+        } = event;
+        setProps(
+          typeof value === 'string' ? value.split(',') : value,
+        );
+      };
+
+    
     return (
         <Box className={styles.homepage}>
 
@@ -104,27 +134,29 @@ const Home = () => {
         <Box className={styles.homecontainer} >
 
                 <Box className={styles.inputparams}>
+                    <br></br>
                     <Typography variant='h6'><b>Input Parameters</b></Typography>
+                    <br></br>
+                    <br></br>
+
                     <Box className={styles.paramContainer}>
-                        <TextField className={styles.numparam} id='p1' label='p1' type='number' />
-                        <TextField className={styles.numparam} id='p2' label='p2' type='number' />
-                        <TextField className={styles.numparam} id='p3' label='p3' type='number' />
-                        <TextField className={styles.numparam} id='p4' label='p4' type='number' />
-                        <TextField className={styles.numparam} id='k' label='k' type='number' />
-                        <Tooltip title="each p value must be between 0 and 1. k should be greater than 2.">
-                            <InfoIcon />
-                        </Tooltip>
+                        <input placeholder='p1' min='0' max='1' step='.1' className={styles.numparam} id='p1' label='p1' type='number' />
+                        <input placeholder='p2' min='0' max='1' step='.1' className={styles.numparam} id='p2' label='p2' type='number' />
+                        <input placeholder='p3' min='0' max='1' step='.1' className={styles.numparam} id='p3' label='p3' type='number' />
+                        <input placeholder='p4' min='0' max='1' step='.1' className={styles.numparam} id='p4' label='p4' type='number' />
+                        <input placeholder='k' min='2' className={styles.numparam} id='k' label='k' type='number' />
+
                     </Box>
-                    <Box className={styles.paramContainer}> 
-                        <TextField className={styles.param} id='props' label='props' type='text' />
+                    <Box className={styles.allParams}>
+                    <Box className={styles.plotsContainer}> 
 
                         <FormControl sx={{ m: 1, width: 300 }}>
-                            <InputLabel>plots</InputLabel>
+                            <InputLabel>Plots</InputLabel>
                             <Select
                             labelId="plots"
                             multiple
                             value={models}
-                            onChange={handleChange}
+                            onChange={handleChangeModels}
                             input={<OutlinedInput label="Plot" />}
                             renderValue={(selected) => selected.join(', ')}
                             // MenuProps={MenuProps}
@@ -137,14 +169,48 @@ const Home = () => {
                             ))}
                             </Select>
                         </FormControl>
+                        <FormControl sx={{ m: 1, width: 300 }}>
+                            <InputLabel>Props</InputLabel>
+                            <Select
+                            labelId="props"
+                            multiple
+                            value={props}
+                            onChange={handleChangeProps}
+                            input={<OutlinedInput label="Prop" />}
+                            renderValue={(selected) => selected.join(', ')}
+                            // MenuProps={MenuProps}
+                            >
+                            {propList.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                <Checkbox checked={props.indexOf(name) > -1} />
+                                <ListItemText primary={name} />
+                                </MenuItem>
+                            ))}
+                            </Select>
+                        </FormControl>
+                        </Box>
+
                     </Box>
+
+                    <Box>
+                        <FormControlLabel
+                        control = {
+                            <Checkbox
+                            name='Noise?'
+                            value='Noise'
+                            />
+                        }
+                        label='Plot Noise?'/>
+
+                    </Box>
+                    
                 </Box>
 
         </Box>
 
         <Box className={styles.generatebutton}>
             <Button 
-                sx = {{height:100, width: 300, fontSize: 20, borderRadius:12}}
+                sx = {{height:75, width: 300, fontSize: 20, borderRadius:10}}
                 size='large' 
                 variant='contained' 
                 onClick={() => getSum1()}>
