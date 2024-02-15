@@ -1,4 +1,20 @@
-.images {
-    width: 100%;
-    height: 100vh;
+.container {
+    /* Your existing container styles */
+}
+
+.title {
+    /* Your title styles */
+}
+
+.paramsContainer {
+    margin-top: 16px;
+}
+
+.paramsContainer h6 {
+    display: inline;
+    margin-right: 8px;
+}
+
+.paramsContainer span {
+    /* Your parameter styles */
 }

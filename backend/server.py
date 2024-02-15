@@ -5,10 +5,14 @@ import os
 import shutil
 from Matrix import *
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CACHE_DIR = os.path.join(BASE_DIR, "cache")
+GRAPH_ROBUSTNESS_DIR = os.path.join(BASE_DIR, "GraphRobustness")
+PLOT_REPO_DIR = os.path.join(GRAPH_ROBUSTNESS_DIR, "plotRepo")
+
 def match_cwd_to_folder(folder_name):
-    os.chdir("/home/lexiekateb/Documents/khaled-website/backend/cache")
+    os.chdir(CACHE_DIR)
     folder_names = os.listdir()
-    print(folder_names)
 
     for name in folder_names:
         if os.path.isdir(name) and name == folder_name:
@@ -17,8 +21,7 @@ def match_cwd_to_folder(folder_name):
     return False
 
 def clearPlotRepo():
-    os.chdir("/home/lexiekateb/Documents/GraphRobustness/plotRepo")
-    print('here', os.listdir())
+    os.chdir(PLOT_REPO_DIR)
     all_files = os.listdir()
 
     # get only image files
@@ -27,7 +30,7 @@ def clearPlotRepo():
     # delete them
     for image_file in image_files:
         try:
-            os.remove(image_file)
+            os.remove(os.path.join(PLOT_REPO_DIR, image_file))
         except Exception as e:
             print(f"Error deleting {image_file}: {e}")
 
@@ -43,7 +46,7 @@ def copy_images(src_folder, dest_folder):
     all_files = os.listdir(src_folder)
     image_files = [file for file in all_files if file.lower().endswith(('.png', '.jpg', '.jpeg'))]
 
-    # cppy each image file to the destination folder
+    # copy each image file to the destination folder
     for image_file in image_files:
         try:
             src_path = os.path.join(src_folder, image_file)
@@ -56,11 +59,7 @@ def copy_images(src_folder, dest_folder):
 
 
 def run_cmd(command, cwd):
-    if(cwd == ""):
-        result = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    else:
-        result = subprocess.Popen(command, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
+    result = subprocess.Popen(command, shell=True, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     result.wait()
     return result.returncode
 
@@ -69,7 +68,6 @@ CORS(app)
 @app.route("/", methods = ['POST'])
 def hello():
     in_json = request.get_json(force=True)
-    print('entered here')
     p1 = "--p " + in_json['p1']
     p2 = in_json['p2']
     p3 = in_json['p3']
@@ -77,9 +75,8 @@ def hello():
     plots = "--plots " + in_json['plots']
     props = "--props " + in_json['props']
     k = "--k " + in_json['k']
-    cmd_string = p1 + " " + p2 + " " + p3 + " " + p4 + " " + plots + " " + props + " " + k
-    print(cmd_string)
-    run_cmd('cd /home/lexiekateb/Documents/GraphRobustness', "")
+    cmd_string = f"python {os.path.join(GRAPH_ROBUSTNESS_DIR, 'plotGraphProps.py')} {p1} {p2} {p3} {p4} {plots} {props} {k}"
+    os.chdir(GRAPH_ROBUSTNESS_DIR)
     clearPlotRepo()
 
     # we need to check if the current cmd_string is already a folder
@@ -88,14 +85,12 @@ def hello():
     if inCache:
         # we need to pull those images into the plotRepo folder
         print('found in cache')
-        copy_images("/home/lexiekateb/Documents/khaled-website/backend/cache" + cmd_string, "/home/lexiekateb/Documents/GraphRobustness/plotRepo")
+        copy_images(os.path.join(CACHE_DIR, cmd_string), PLOT_REPO_DIR)
     else:
         # we need to run the command and then copy the images into the plotRepo folder
-        run_cmd('python plotGraphProps.py ' + cmd_string, '/home/lexiekateb/Documents/GraphRobustness')
-        copy_images("/home/lexiekateb/Documents/GraphRobustness/plotRepo", "/home/lexiekateb/Documents/khaled-website/backend/cache" + cmd_string)
+        run_cmd(cmd_string, GRAPH_ROBUSTNESS_DIR)
+        copy_images(PLOT_REPO_DIR, os.path.join(CACHE_DIR, cmd_string))
     return jsonify('done')
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
