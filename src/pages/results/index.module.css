@@ -1,20 +1,39 @@
 .container {
-    /* Your existing container styles */
-}
-
-.title {
-    /* Your title styles */
-}
-
-.paramsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-top: 16px;
-}
-
-.paramsContainer h6 {
+  }
+  
+  .paramsContainer {
+    margin-top: 16px;
+  }
+  
+  .paramsContainer h6 {
     display: inline;
     margin-right: 8px;
-}
-
-.paramsContainer span {
-    /* Your parameter styles */
-}
+  }
+  
+  .imagesContainer {
+    display: flex;
+    width: fit-content;
+    flex-wrap: wrap;
+    justify-content: left;
+    margin-top: 16px;
+  }
+  
+  .imageItem {
+    flex-basis: calc(34% - 16px); 
+    margin-bottom: 16px; 
+    box-sizing: border-box; 
+    padding: 8px; 
+  }
+  
+  
+  .image {
+    width: 100%; 
+    height: 100%; 
+    object-fit: contain; 
+  }
+  
