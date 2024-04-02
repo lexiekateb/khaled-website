@@ -59,6 +59,7 @@ def copy_images(src_folder, dest_folder):
 
 
 def run_cmd(command, cwd):
+    print(f"Running command: {command} in {cwd}")
     result = subprocess.Popen(command, shell=True, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     result.wait()
     return result.returncode
@@ -67,6 +68,7 @@ app = Flask(__name__)
 CORS(app)
 @app.route("/", methods = ['POST'])
 def hello():
+    clearPlotRepo()
     in_json = request.get_json(force=True)
     p1 = "--p " + in_json['p1']
     p2 = in_json['p2']
@@ -75,9 +77,8 @@ def hello():
     plots = "--plots " + in_json['plots']
     props = "--props " + in_json['props']
     k = "--k " + in_json['k']
-    cmd_string = f"python {os.path.join(GRAPH_ROBUSTNESS_DIR, 'plotGraphProps.py')} {p1} {p2} {p3} {p4} {plots} {props} {k}"
+    cmd_string = f"{p1} {p2} {p3} {p4} {plots} {props} {k}"
     os.chdir(GRAPH_ROBUSTNESS_DIR)
-    clearPlotRepo()
 
     # we need to check if the current cmd_string is already a folder
     inCache = match_cwd_to_folder(cmd_string)
@@ -88,7 +89,7 @@ def hello():
         copy_images(os.path.join(CACHE_DIR, cmd_string), PLOT_REPO_DIR)
     else:
         # we need to run the command and then copy the images into the plotRepo folder
-        run_cmd(cmd_string, GRAPH_ROBUSTNESS_DIR)
+        run_cmd('python plotGraphProps.py ' + cmd_string, GRAPH_ROBUSTNESS_DIR)
         copy_images(PLOT_REPO_DIR, os.path.join(CACHE_DIR, cmd_string))
     return jsonify('done')
 

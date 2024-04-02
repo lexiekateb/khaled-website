@@ -116,20 +116,8 @@ const Home = () => {
             'k': document.getElementById('k').value,
         });
         setReceived(true);
-        setLoading(true); 
-    
-        try {
-            setLoading(true); 
-            const response = await APIcall();
-            setLoading(false); 
-            if (response) {
-                getResults();
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            setLoading(false);
-        }
     }
+    
     
 
     return (
@@ -140,12 +128,12 @@ const Home = () => {
                     <br />
                     <Typography variant='h6'><b>Input Parameters</b></Typography>
                     <br />
-                    <br />
+                    <br />l
                     <Box className={styles.paramContainer}>
-                        <input placeholder='p1' min='0' max='1' step='.1' className={styles.numparam} id='p1' label='p1' type='number' />
-                        <input placeholder='p2' min='0' max='1' step='.1' className={styles.numparam} id='p2' label='p2' type='number' />
-                        <input placeholder='p3' min='0' max='1' step='.1' className={styles.numparam} id='p3' label='p3' type='number' />
-                        <input placeholder='p4' min='0' max='1' step='.1' className={styles.numparam} id='p4' label='p4' type='number' />
+                        <input placeholder='p1' min='0' max='1' step='.001' className={styles.numparam} id='p1' label='p1' type='number' />
+                        <input placeholder='p2' min='0' max='1' step='.001' className={styles.numparam} id='p2' label='p2' type='number' />
+                        <input placeholder='p3' min='0' max='1' step='.001' className={styles.numparam} id='p3' label='p3' type='number' />
+                        <input placeholder='p4' min='0' max='1' step='.001' className={styles.numparam} id='p4' label='p4' type='number' />
                         <input placeholder='k' min='2' className={styles.numparam} id='k' label='k' type='number' />
                     </Box>
                     <Box className={styles.allParams}>

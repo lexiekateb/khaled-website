@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 
 const Results = () => {
   const [imageList, setImageList] = useState([]);
+  const [noiseList, setNoiseList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0); // State for current tab value
   const state = useLocation();
@@ -16,14 +17,22 @@ const Results = () => {
   useEffect(() => {
     const images = require.context(
       '/home/lexiekateb/Documents/khaled-website/backend/GraphRobustness/plotRepo',
-      true,
+      false,
       /\.(png|jpe?g|svg)$/
     );
+    const noise = require.context(
+      '/home/lexiekateb/Documents/khaled-website/backend/GraphRobustness/plotRepo/noise',
+      false,
+      /\.(png|jpe?g|svg)$/
+    )
     const imageKeys = images.keys();
+    const noiseKeys = noise.keys();
     const loadedImages = imageKeys.map((image) => images(image));
-    // Check if all images are loaded
-    Promise.all(loadedImages).then(() => {
+    const noiseImages = noiseKeys.map((image) => noise(image));
+
+    Promise.all(loadedImages, noiseImages).then(() => {
       setImageList(loadedImages);
+      setNoiseList(noiseImages);
       setLoading(false); // set loading state to false when all images are loaded
     });
   }, []);
@@ -80,7 +89,17 @@ const Results = () => {
               ))}
             </div>
           )}
-          {tabValue === 1 && <div className={styles.imagesContainer}>noise images will go here</div>}
+          {tabValue === 1 && <div className={styles.imagesContainer}>
+            {noiseList.map((image, i) => (
+                <div key={i} className={styles.imageItem}>
+                  <img
+                    src={image}
+                    alt="results"
+                    loading="eager"
+                    className={styles.image}
+                  />
+                </div>
+              ))}</div>}
         </div>
       )}
     </Box>
