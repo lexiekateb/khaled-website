@@ -2,7 +2,7 @@
 
 .homepage {
     display: flex;
-    background-color: #CCCCCC;
+    background-color: #f2f2f2;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
@@ -26,19 +26,19 @@
 }
 
 .inputparams {
-    background-color: aliceblue;
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30vw;
+    width: 80vw;
     flex-direction: column;
     flex-wrap: wrap;
     border-radius: 20px;
     font-family: 'Open Sans', sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.allParams
-{
+.allParams {
     padding: 2rem;
     display: flex;
     align-items: center;
@@ -65,8 +65,28 @@
 }
 
 .numparam {
-    width: 50px;
+    width: 100%;
+    max-width: 100px; /* You can adjust this value based on your preference */
     height: 30px;
     border-color: rgb(235, 235, 235);
     border-radius: 5px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+}
+
+.generatebutton {
+    margin-top: 2rem;
+}
+
+.generatebutton button {
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.generatebutton button:hover {
+    background-color: #0056b3;
 }

@@ -1,39 +1,60 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 16px;
-  }
-  
-  .paramsContainer {
-    margin-top: 16px;
-  }
-  
-  .paramsContainer h6 {
-    display: inline;
-    margin-right: 8px;
-  }
-  
-  .imagesContainer {
-    display: flex;
-    width: fit-content;
-    flex-wrap: wrap;
-    justify-content: left;
-    margin-top: 16px;
-  }
-  
-  .imageItem {
-    flex-basis: calc(34% - 16px); 
-    margin-bottom: 16px; 
-    box-sizing: border-box; 
-    padding: 8px; 
-  }
-  
-  
-  .image {
-    width: 100%; 
-    height: 100%; 
-    object-fit: contain; 
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  font-family: 'Open Sans', sans-serif; /* Set a default font family */
+}
+
+.title {
+  padding-top: 5vh;
+  font-weight: 600;
+  font-size: 24px; /* Increase font size for better readability */
+}
+
+.paramsContainer {
+  margin-top: 20px; /* Increase margin top for better spacing */
+}
+
+.paramsTitle {
+  font-weight: bold; /* Make the parameters title bold */
+}
+
+.paramsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Adjust gap between parameters */
+}
+
+.param {
+  background-color: #f0f0f0; /* Light background color for parameters */
+  padding: 8px 12px; /* Add padding to parameters for better spacing */
+  border-radius: 4px; /* Add border radius for rounded corners */
+}
+
+.imagesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center align images */
+  margin-top: 20px; /* Increase margin top for better spacing */
+}
+
+.imageItem {
+  width: 30%; /* Adjust width of image items */
+  margin: 10px; /* Adjust margin for better spacing */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08); /* Add box shadow for depth */
+  border-radius: 8px; /* Add border radius for rounded corners */
+  overflow: hidden; /* Hide overflowing content */
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Adjust image fit to cover entire container */
+  transition: transform 0.3s ease; /* Add smooth transition effect */
+}
+
+.image:hover {
+  transform: scale(1.05); /* Scale up image on hover for interactive effect */
+}

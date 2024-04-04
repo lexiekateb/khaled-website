@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import styles from './index.module.css';
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import { CircularProgress } from "@mui/material";
-
 import { MenuItem, Checkbox, ListItemText, Select, InputLabel, FormControl, OutlinedInput, FormControlLabel } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-    const [received, setReceived] = useState(false);
     const [loading, setLoading] = useState(false);
     const [models, setModels] = useState([]);
-    const [path, setPath] = useState("");
     const [props, setProps] = useState([]);
     const navigate = useNavigate();
 
@@ -24,7 +21,7 @@ const Home = () => {
         'kde_hist',
         'graph',
         'spy',
-    ]
+    ];
 
     const propList = [
         'deg',
@@ -39,61 +36,7 @@ const Home = () => {
         'closeness-centrality',
         'hop-count',
         'scree'
-    ]
-
-    useEffect(() => {
-        if(received === true) {
-            setLoading(true);
-            APIcall()
-                .then(() => {
-                    setLoading(false);
-                    getResults();
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    setLoading(false);
-                });
-        }
-    }, [received]);
-
-    const getResults = () => {
-        navigate('/results', {
-            state: {
-                imgpath: path,
-                params: params,
-            }
-        });
-    }
-
-    const [params, setParams] = useState({
-        'p0': "",
-        'p1': "",
-        'p2': "",
-        'p3': "",
-        'p4': "",
-        plots: "",
-        props: "",
-        k: "",
-    });
-
-    const APIcall = async () => {
-        const response = await fetch('http://localhost:5000/', {
-            method: 'POST',
-            body: JSON.stringify(params),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-    
-        if (!response.ok) {
-            throw new Error('Failed to fetch data');
-        }
-    
-        const data = await response.json();
-        setPath(data);
-        return data; 
-    }
-    
+    ];
 
     const handleChangeModels = (event) => {
         const { target: { value } } = event;
@@ -106,20 +49,15 @@ const Home = () => {
     };
 
     const handleSubmit = async () => {
-        setParams({
-            'p1': document.getElementById('p1').value,
-            'p2': document.getElementById('p2').value,
-            'p3': document.getElementById('p3').value,
-            'p4': document.getElementById('p4').value,
-            'plots': models.join(' '),
-            'props': props.join(' '),
-            'k': document.getElementById('k').value,
+        setLoading(true);
+        navigate('/results', {
+            state: {
+                models,
+                props
+            }
         });
-        setReceived(true);
     }
     
-    
-
     return (
         <Box className={styles.homepage}>
             <Typography variant='h4' className={styles.title}>Sparse Model Generator</Typography>
@@ -128,13 +66,13 @@ const Home = () => {
                     <br />
                     <Typography variant='h6'><b>Input Parameters</b></Typography>
                     <br />
-                    <br />l
+                    <br />
                     <Box className={styles.paramContainer}>
-                        <input placeholder='p1' min='0' max='1' step='.001' className={styles.numparam} id='p1' label='p1' type='number' />
-                        <input placeholder='p2' min='0' max='1' step='.001' className={styles.numparam} id='p2' label='p2' type='number' />
-                        <input placeholder='p3' min='0' max='1' step='.001' className={styles.numparam} id='p3' label='p3' type='number' />
-                        <input placeholder='p4' min='0' max='1' step='.001' className={styles.numparam} id='p4' label='p4' type='number' />
-                        <input placeholder='k' min='2' className={styles.numparam} id='k' label='k' type='number' />
+                        <TextField label="p1" type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.001 } }} className={styles.numparam} />
+                        <TextField label="p2" type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.001 } }} className={styles.numparam} />
+                        <TextField label="p3" type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.001 } }} className={styles.numparam} />
+                        <TextField label="p4" type="number" InputProps={{ inputProps: { min: 0, max: 1, step: 0.001 } }} className={styles.numparam} />
+                        <TextField label="k" type="number" InputProps={{ inputProps: { min: 2 } }} className={styles.numparam} />
                     </Box>
                     <Box className={styles.allParams}>
                         <Box className={styles.plotsContainer}>
