@@ -21,39 +21,29 @@ def match_cwd_to_folder(folder_name):
     return False
 
 def clearPlotRepo():
-    os.chdir(PLOT_REPO_DIR)
-    all_files = os.listdir()
-
-    # get only image files
-    image_files = [file for file in all_files if file.lower().endswith(('.png', '.jpg', '.jpeg'))]
-
-    # delete them
-    for image_file in image_files:
-        try:
-            os.remove(os.path.join(PLOT_REPO_DIR, image_file))
-        except Exception as e:
-            print(f"Error deleting {image_file}: {e}")
+    for root, dirs, files in os.walk(PLOT_REPO_DIR):
+        for file in files:
+            if file.lower().endswith(('.png', '.jpg', '.jpeg')):
+                try:
+                    os.remove(os.path.join(root, file))
+                except Exception as e:
+                    print(f"Error deleting {file}: {e}")
 
     print("Folder cleared of all images.")
 
 def copy_images(src_folder, dest_folder):
-
-    # if it is a NEW cache, this executes
-    # if copying from existing cache to plotRepo, this does not execute
     if not os.path.exists(dest_folder):
         os.makedirs(dest_folder)
 
-    all_files = os.listdir(src_folder)
-    image_files = [file for file in all_files if file.lower().endswith(('.png', '.jpg', '.jpeg'))]
-
-    # copy each image file to the destination folder
-    for image_file in image_files:
-        try:
-            src_path = os.path.join(src_folder, image_file)
-            dest_path = os.path.join(dest_folder, image_file)
-            shutil.copy2(src_path, dest_path)  # Use copy2 to preserve metadata
-        except Exception as e:
-            print(f"Error copying {image_file}: {e}")
+    for root, dirs, files in os.walk(src_folder):
+        for file in files:
+            if file.lower().endswith(('.png', '.jpg', '.jpeg')):
+                try:
+                    src_path = os.path.join(root, file)
+                    dest_path = os.path.join(dest_folder, file)
+                    shutil.copy2(src_path, dest_path)
+                except Exception as e:
+                    print(f"Error copying {file}: {e}")
 
     print("Images copied successfully.")
 
