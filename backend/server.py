@@ -1,4 +1,7 @@
 import subprocess
+import tempfile
+from zipfile import ZipFile
+from flask import send_file, send_from_directory
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
@@ -82,6 +85,32 @@ def hello():
         run_cmd('python plotGraphProps.py ' + cmd_string, GRAPH_ROBUSTNESS_DIR)
         copy_images(PLOT_REPO_DIR, os.path.join(CACHE_DIR, cmd_string))
     return jsonify('done')
+
+
+from flask import send_from_directory
+
+@app.route("/images", methods=['GET'])
+def download_images():
+    # creates temporary file
+    temp_dir = tempfile.mkdtemp()
+    zip_filename = os.path.join(temp_dir, "images.zip")
+    # Create a zip file to add all images
+    with ZipFile(zip_filename, 'w') as zipf:
+        for root, dirs, files in os.walk(PLOT_REPO_DIR):
+            for file in files:
+                if file.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    file_path = os.path.join(root, file)
+                    zipf.write(file_path, os.path.relpath(file_path, GRAPH_ROBUSTNESS_DIR))
+
+    # Send the zip file 
+    response = send_file(zip_filename, as_attachment=True)
+
+    return response
+    # Cleanup temporary files after sending
+    @response.call_on_close
+    def cleanup_temp_dir():
+        shutil.rmtree(temp_dir)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo} from "react";
 import { useNavigate } from 'react-router-dom';
 import styles from "./index.module.css";
 import Box from "@mui/material/Box";
@@ -8,29 +8,92 @@ import { saveAs } from 'file-saver';
 
 const Results = () => {
   const navigate = useNavigate();
-  const [imageList, setImageList] = useState([]);
-  const [noiseList, setNoiseList] = useState([]);
+  // const [imageList, setImageList] = useState([]);
+  // const [noiseList, setNoiseList] = useState([]);
+  const [loadedImages, setLoadedImages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tabValue, setTabValue] = useState(0); // State for current tab value
-  const [selectedImage, setSelectedImage] = useState(null); // State for selected image
+  const [tabValue, setTabValue] = useState(0); 
+  const [selectedImage, setSelectedImage] = useState(null); 
 
-  useEffect(() => {
-    const images = require.context(
-      '../../../backend/GraphRobustness/plotRepo', // Updated path to backend folder
-      true,
-      /\.(png|jpe?g|svg)$/
-    );
-    const imageKeys = images.keys();
-    const loadedImages = imageKeys.map((image) => images(image));
-    // Check if all images are loaded
-    Promise.all(loadedImages).then(() => {
-      const imagesWithNoise = loadedImages.filter((image) => image.includes("noise"));
-      const imagesWithoutNoise = loadedImages.filter((image) => !image.includes("noise"));
-      setImageList(imagesWithoutNoise);
-      setNoiseList(imagesWithNoise);
-      setLoading(false); // set loading state to false when all images are loaded
-    });
-  }, []);
+//   const fetchImages = async () => {
+//     try {
+//         const response = await fetch('http://localhost:5000/images');
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok.');
+//         }
+//         const blob = await response.blob();
+//         const jsZip = new JSZip();
+//         const zip = await jsZip.loadAsync(blob);
+//         const imageFiles = [];
+
+//         // Collect promises to process each image
+//         const filePromises = Object.keys(zip.files).map(async fileName => {
+//             const zipEntry = zip.files[fileName];
+//             if (zipEntry.name.endsWith('.png') || zipEntry.name.endsWith('.jpg') || zipEntry.name.endsWith('.jpeg')) {
+//                 const imageBlob = await zipEntry.async('blob');
+//                 const url = URL.createObjectURL(imageBlob);
+//                 imageFiles.push(url);
+//             }
+//         });
+
+//         // Wait for all file promises to complete
+//         await Promise.all(filePromises);
+//         setLoadedImages(imageFiles);  // Update state once all files are processed
+//     } catch (error) {
+//         console.error('Error while downloading images:', error);
+//     }
+
+// };
+
+//   useEffect(() => {
+//     setLoading(true);
+
+//     console.log('begin')
+
+//     fetchImages();
+
+//       const imagesWithNoise = loadedImages.filter((image) => image.includes("noise"));
+//       const imagesWithoutNoise = loadedImages.filter((image) => !image.includes("noise"));
+//       setImageList(imagesWithoutNoise);
+//       setNoiseList(imagesWithNoise);
+//       setLoading(false); // set loading state to false when all images are loaded
+//   }, [loadedImages]);
+
+const fetchImages = async () => {
+  setLoading(true);
+  try {
+      const response = await fetch('http://localhost:5000/images');
+      if (!response.ok) throw new Error('Network response was not ok.');
+
+      const blob = await response.blob();
+      const jsZip = new JSZip();
+      const zip = await jsZip.loadAsync(blob);
+      const imageFiles = await Promise.all(
+        Object.keys(zip.files).map(async fileName => {
+          const zipEntry = zip.files[fileName];
+          if (zipEntry.name.endsWith('.png') || zipEntry.name.endsWith('.jpg') || zipEntry.name.endsWith('.jpeg')) {
+              const imageBlob = await zipEntry.async('blob');
+              return URL.createObjectURL(imageBlob);
+          }
+          return null;
+        })
+      );
+
+      setLoadedImages(imageFiles.filter(Boolean));  // filter out nulls and set loaded images
+  } catch (error) {
+      console.error('Error while downloading images:', error);
+  } finally {
+      setLoading(false);
+  }
+};
+
+useEffect(() => {
+  fetchImages();
+}, []);
+
+const imageList = useMemo(() => loadedImages.filter(image => !image.includes("noise")), [loadedImages]);
+const noiseList = useMemo(() => loadedImages.filter(image => image.includes("noise")), [loadedImages]);
+
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -67,6 +130,9 @@ const Results = () => {
         });
     });
   };
+
+  if(loading) return (
+  <Box className={styles.spinny}><CircularProgress size={'15rem'} /></Box>);
 
   return (
     <Box className={styles.container} sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>

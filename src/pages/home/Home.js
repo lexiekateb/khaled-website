@@ -78,6 +78,8 @@ const Home = () => {
     };
 
     const handleSubmit = async () => {
+
+        setLoading(true);
         const requestBody = {
             ...inputValues,
             plots: models.join(' '), 
@@ -97,7 +99,7 @@ const Home = () => {
                 console.log("data to set as path:" + data);
             }));
     
-        setLoading(true);
+        setLoading(false);
         navigate('/results', {
             state: {
                 models,
@@ -112,6 +114,10 @@ const Home = () => {
         const newData = { ...storedData, ...data };
         localStorage.setItem('sparseModelData', JSON.stringify(newData));
     };
+
+    if(loading) {
+        return(<Box className={styles.spinny}><CircularProgress  size='10rem'/></Box>)
+    }
     
     return (
         <Box className={styles.homepage}>
@@ -181,7 +187,6 @@ const Home = () => {
                     Generate
                 </Button>
             </Box>
-            {loading && <CircularProgress sx={{ marginTop: 2 }} />}
         </Box>
     );
 }
